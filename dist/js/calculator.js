@@ -26,8 +26,7 @@ function toJSON(item, models) {
     //Default values
     json['parent'] = 'item/handheld';
     json['textures'] = {
-        'layer0': 'item/leather_boots',
-        'layer1': 'items/leather_boots_overlay'
+        'layer0': 'item/leather_boots'
     };
 
     //Insert models
