@@ -10,11 +10,14 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css"
           integrity="sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q=="
           crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous"/>
     <link rel="stylesheet" href="dist/css/beautify.css">
 </head>
 <body>
 <div class="container">
-    <div class="jumbotron">
+    <div class="jumbotron mb-4">
         <h1 class="display-4">Volmit Software - Damage calculator</h1>
         <p class="lead">Simply calculate the damage values for your texture pack.</p>
         <hr class="my-4">
@@ -22,65 +25,123 @@
             creates the .json file for you.</p>
     </div>
     <form id="calculatorForm">
-        <div class="mb-3">
-            <label for="item">Select the item:</label>
+        <div class="mb-3 w-50">
+            <label for="item">The item to use:</label>
             <select class="form-control" id="item" name="item" required>
                 <option selected>Select an item...</option>
                 <option value="leather_boots">Leather Boots</option>
             </select>
         </div>
-        <div class="mb-3">
-            <label for="item1">Item for damage 1:</label>
-            <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car" required>
+        <div id="formItems" style="display: none;">
+            <div class="mb-3 w-50">
+                <label for="itemcount">The amount of models:</label>
+                <div class="input-group">
+                    <button type="button" class="btn btn-outline-secondary btn-number" disabled
+                            data-type="minus" data-field="quant[1]">
+                        <span class="fas fa-minus"></span>
+                    </button>
+                    <input type="text" id="itemcount" name="quant[1]" class="form-control input-number" value="1" min="1"
+                           max="2" readonly>
+                    <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus"
+                            data-field="quant[1]">
+                        <span class="fas fa-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div id="items">
+                <div class="mb-3 w-50">
+                    <label for="item1">Model for damage 1:</label>
+                    <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Calculate</button>
         </div>
-        <div class="mb-3">
-            <label for="item2">Item for damage 2:</label>
-            <input type="text" class="form-control" id="item2" name="item2" placeholder="cars/red_car" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Calculate</button>
     </form>
     <hr class="my-4">
     <h6>Output JSON:</h6>
-    <pre id="content" class="mb-3">Fill in the form above to get an output.</pre>
-    <button id="copyButton" class="btn btn-primary mb-3 mr-3">Copy</button> <a id="downloadButton" class="btn btn-secondary mb-3" href="#">Download</a>
+    <pre id="content" class="mb-3 w-50">Fill in the form above to get an output.</pre>
+    <button id="copyButton" class="btn btn-primary mb-3 mr-3">Copy</button>
+    <a id="downloadButton" class="btn btn-secondary mb-3" href="#">Download</a>
 </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous"></script>
+<script type="application/javascript" src="dist/js/bootstrap-plusmin.js"></script>
 <script type="application/javascript" src="dist/js/calculator.js"></script>
 <script type="application/javascript" src="dist/js/beautify.js"></script>
 <script>
-    const form = document.getElementById("calculatorForm");
-    const output = document.getElementById("content");
+    $(document).ready(function () {
+        const form = document.getElementById("calculatorForm");
+        const output = document.getElementById("content");
 
-    const copybutton = document.getElementById("copyButton");
-    const downloadbutton = document.getElementById("downloadButton");
+        const copybutton = document.getElementById("copyButton");
+        const downloadbutton = document.getElementById("downloadButton");
 
-    form.addEventListener("submit", function (e) {
-        if (e.preventDefault) e.preventDefault();
+        $('#item').change(function () {
+            if (this.value !== "") {
+                $("#formItems").show();
 
-        const item = document.getElementById('item').value;
-        const model1 = document.getElementById('item1').value;
-        const model2 = document.getElementById('item2').value;
-        const models = [model1, model2];
+                const max = itemDamages[this.value];
+                $("#itemcount").prop('max', max);
+            } else {
+                $("#formItems").hide();
+            }
+        });
 
-        const json = toJSON(item, models);
+        $('.btn-number').click(function (e) {
+            e.preventDefault();
 
-        output.innerHTML = syntaxHighlight(json);
+            const fieldName = $(this).attr('data-field');
+            const type = $(this).attr('data-type');
+            const input = $("input[name='" + fieldName + "']");
+            const currentVal = parseInt(input.val());
 
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(json);
-        downloadbutton.setAttribute("href", dataStr);
-        downloadbutton.setAttribute("download", item + ".json");
+            if (type === 'minus') {
+                $("#iteminput" + (currentVal + 1)).remove();
+            } else if (type === 'plus') {
+                $("#items").append("<div id=\"iteminput" + currentVal + "\" class=\"mb-3 w-50\"><label for=\"item" + currentVal + "\">Model for damage " + currentVal + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + currentVal + "\" name=\"item" + currentVal + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
+            }
+        });
 
-        return false;
-    });
+        form.addEventListener("submit", function (e) {
+            if (e.preventDefault) e.preventDefault();
 
-    copybutton.addEventListener("click", function() {
-        const copyText = output.textContent;
-        const textArea = document.createElement("textarea");
-        textArea.textContent = copyText;
-        document.body.append(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        textArea.remove();
+            const item = document.getElementById('item').value;
+
+            const fieldName = $('.btn-number').attr('data-field');
+            const input = $("input[name='" + fieldName + "']");
+            const currentVal = parseInt(input.val());
+
+            const models = [];
+            for (let i = 0; i < currentVal; i++) {
+                models[i] = document.getElementById("item" + (i + 1)).value;
+            }
+            const json = toJSON(item, models);
+
+            output.innerHTML = syntaxHighlight(json);
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(json);
+            downloadbutton.setAttribute("href", dataStr);
+            downloadbutton.setAttribute("download", item + ".json");
+
+            return false;
+        });
+
+        copybutton.addEventListener("click", function () {
+            const copyText = output.textContent;
+            const textArea = document.createElement("textarea");
+            textArea.textContent = copyText;
+            document.body.append(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            textArea.remove();
+        });
+
+        function randomModel() {
+            const months = ["red_car", "blue_car", "green_car", "orange_car", "blue_bicycle", "red_bicycle", "green_bicycle", "orange_bicycle"];
+            return months[Math.floor(Math.random() * months.length)];
+        }
     });
 </script>
 </html>
