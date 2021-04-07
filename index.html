@@ -28,7 +28,7 @@
         <div class="mb-3 w-50">
             <label for="item">The item to use:</label>
             <select class="form-control" id="item" name="item" required>
-                <option selected>Select an item...</option>
+                <option value="" selected>Select an item...</option>
                 <option value="leather_boots">Leather Boots</option>
             </select>
         </div>
@@ -72,64 +72,85 @@
 <script type="application/javascript" src="dist/js/beautify.js"></script>
 <script>
     $(document).ready(function () {
-        const form = document.getElementById("calculatorForm");
-        const output = document.getElementById("content");
+        const form = $("#calculatorForm");
+        const formOptions = $("#formItems");
 
-        const copybutton = document.getElementById("copyButton");
-        const downloadbutton = document.getElementById("downloadButton");
+        const item = $("#item");
+        const itemCount = $("#itemcount");
+        const items = $("#items");
 
-        $('#item').change(function () {
-            if (this.value !== "") {
-                $("#formItems").show();
+        const output = $("#content");
 
+        const copyButton = $("#copyButton");
+        const downloadButton = $("#downloadButton");
+
+        item.change(function () {
+            console.log(this.value);
+
+            if (this.value !== "") { //If value is not empty, show other options ...
+                formOptions.show();
+
+                //... and set max value of item count.
                 const max = itemDamages[this.value];
-                $("#itemcount").prop('max', max);
-            } else {
-                $("#formItems").hide();
+                itemCount.prop('max', max);
+            } else { //Or if empty, hide other options.
+                formOptions.hide();
             }
         });
 
         $('.btn-number').click(function (e) {
             e.preventDefault();
 
+            //Get the item count and clicked type
             const fieldName = $(this).attr('data-field');
             const type = $(this).attr('data-type');
             const input = $("input[name='" + fieldName + "']");
             const currentVal = parseInt(input.val());
 
-            if (type === 'minus') {
+            if (type === 'minus') { //If removed one, remove latest input.
                 $("#iteminput" + (currentVal + 1)).remove();
-            } else if (type === 'plus') {
-                $("#items").append("<div id=\"iteminput" + currentVal + "\" class=\"mb-3 w-50\"><label for=\"item" + currentVal + "\">Model for damage " + currentVal + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + currentVal + "\" name=\"item" + currentVal + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
+            } else if (type === 'plus') { //If added one, append new input.
+                items.append("<div id=\"iteminput" + currentVal + "\" class=\"mb-3 w-50\"><label for=\"item" + currentVal + "\">Model for damage " + currentVal + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + currentVal + "\" name=\"item" + currentVal + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
             }
         });
 
-        form.addEventListener("submit", function (e) {
-            if (e.preventDefault) e.preventDefault();
+        form.on("submit", function(e){
+            e.preventDefault();
 
-            const item = document.getElementById('item').value;
+            //Get selected item
+            const selectedItem = item.val();
 
+            //Get amount of items
             const fieldName = $('.btn-number').attr('data-field');
             const input = $("input[name='" + fieldName + "']");
             const currentVal = parseInt(input.val());
 
+            //Build models array
             const models = [];
             for (let i = 0; i < currentVal; i++) {
-                models[i] = document.getElementById("item" + (i + 1)).value;
+                models[i] = $("#item" + (i + 1)).val();
             }
-            const json = toJSON(item, models);
 
-            output.innerHTML = syntaxHighlight(json);
+            //Convert to JSON, and set in content field (with syntax highlighting)
+            const json = toJSON(selectedItem, models);
+            output.html(syntaxHighlight(json));
 
+            //And fix the Download knop
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(json);
-            downloadbutton.setAttribute("href", dataStr);
-            downloadbutton.setAttribute("download", item + ".json");
+            downloadButton.attr("href", dataStr);
+            downloadButton.attr("download", selectedItem + ".json");
 
+            //Return false to not reload the page
             return false;
         });
 
-        copybutton.addEventListener("click", function () {
-            const copyText = output.textContent;
+        copyButton.click(function (e) {
+            e.preventDefault();
+
+            //Get the content.
+            const copyText = output.text();
+
+            //Create temporary textarea, select, copy, and remove it again.
             const textArea = document.createElement("textarea");
             textArea.textContent = copyText;
             document.body.append(textArea);
@@ -138,6 +159,11 @@
             textArea.remove();
         });
 
+        /**
+         * Get a random model.
+         *
+         * @return {string} The random model.
+         */
         function randomModel() {
             const months = ["red_car", "blue_car", "green_car", "orange_car", "blue_bicycle", "red_bicycle", "green_bicycle", "orange_bicycle"];
             return months[Math.floor(Math.random() * months.length)];
