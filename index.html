@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>VehiclesPlus - Damage calculator</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css"
+          integrity="sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q=="
+          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="dist/css/beautify.css">
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">VolmitSoftware - Damage calculator</h1>
+        <p class="lead">Simply calculate the damage values for your texture pack.</p>
+        <hr class="my-4">
+        <p>You indicate which item you want to use and where the models are for each damage value. This tool then
+            creates the .json file for you.</p>
+    </div>
+    <form id="calculatorForm">
+        <div class="mb-3">
+            <label for="item">Select the item:</label>
+            <select class="form-control" id="item" name="item" required>
+                <option selected>Select an item...</option>
+                <option value="leather_boots">Leather Boots</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="item1">Item for damage 1:</label>
+            <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car" required>
+        </div>
+        <div class="mb-3">
+            <label for="item2">Item for damage 2:</label>
+            <input type="text" class="form-control" id="item2" name="item2" placeholder="cars/red_car" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+    </form>
+    <hr class="my-4">
+    <h6>Output JSON:</h6>
+    <pre id="content" class="mb-3">Fill in the form above to get an output.</pre>
+    <button id="copyButton" class="btn btn-primary mb-3 mr-3">Copy</button> <a id="downloadButton" class="btn btn-secondary mb-3" href="#">Download</a>
+</div>
+</body>
+<script type="application/javascript" src="dist/js/calculator.js"></script>
+<script type="application/javascript" src="dist/js/beautify.js"></script>
+<script>
+    const form = document.getElementById("calculatorForm");
+    const output = document.getElementById("content");
+
+    const copybutton = document.getElementById("copyButton");
+    const downloadbutton = document.getElementById("downloadButton");
+
+    form.addEventListener("submit", function (e) {
+        if (e.preventDefault) e.preventDefault();
+
+        const item = document.getElementById('item').value;
+        const model1 = document.getElementById('item1').value;
+        const model2 = document.getElementById('item2').value;
+        const models = [model1, model2];
+
+        const json = toJSON(item, models);
+
+        output.innerHTML = syntaxHighlight(json);
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(json);
+        downloadbutton.setAttribute("href", dataStr);
+        downloadbutton.setAttribute("download", item + ".json");
+
+        return false;
+    });
+
+    copybutton.addEventListener("click", function() {
+        const copyText = output.textContent;
+        const textArea = document.createElement("textarea");
+        textArea.textContent = copyText;
+        document.body.append(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
+    });
+</script>
+</html>
