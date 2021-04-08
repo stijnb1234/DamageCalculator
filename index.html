@@ -67,7 +67,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous"></script>
-<script type="application/javascript" src="dist/js/bootstrap-plusmin.js"></script>
 <script type="application/javascript" src="dist/js/calculator.js"></script>
 <script type="application/javascript" src="dist/js/beautify.js"></script>
 <script>
@@ -77,12 +76,50 @@
 
         const item = $("#item");
         const itemCount = $("#itemcount");
+        const itemCountButton = $('.btn-number');
         const items = $("#items");
 
         const output = $("#content");
 
         const copyButton = $("#copyButton");
         const downloadButton = $("#downloadButton");
+
+        itemCountButton.click(function (e) {
+            e.preventDefault();
+
+            let fieldName = $(this).attr('data-field');
+            let type = $(this).attr('data-type');
+            const input = $("input[name='" + fieldName + "']");
+            const currentVal = parseInt(input.val());
+
+            if (!isNaN(currentVal)) {
+                if (type === 'minus') {
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    }
+
+                    if (input.val() == input.attr('min')) {
+                        $(this).attr('disabled', true);
+                        return;
+                    }
+
+                    $("#iteminput" + currentVal).remove();
+                } else if (type === 'plus') {
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    }
+
+                    if (input.val() == input.attr('max')) {
+                        $(this).attr('disabled', true);
+                        return;
+                    }
+
+                    items.append("<div id=\"iteminput" + (currentVal + 1) + "\" class=\"mb-3 w-50\"><label for=\"item" + (currentVal + 1) + "\">Model for damage " + (currentVal + 1) + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + (currentVal + 1) + "\" name=\"item" + (currentVal + 1) + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
+                }
+            } else {
+                input.val(0);
+            }
+        });
 
         item.change(function () {
             if (this.value !== "") { //If value is not empty, show other options ...
@@ -93,22 +130,6 @@
                 itemCount.prop('max', max);
             } else { //Or if empty, hide other options.
                 formOptions.hide();
-            }
-        });
-
-        $('.btn-number').click(function (e) {
-            e.preventDefault();
-
-            //Get the item count and clicked type
-            const fieldName = $(this).attr('data-field');
-            const type = $(this).attr('data-type');
-            const input = $("input[name='" + fieldName + "']");
-            const currentVal = parseInt(input.val());
-
-            if (type === 'minus') { //If removed one, remove latest input.
-                $("#iteminput" + (currentVal + 1)).remove();
-            } else if (type === 'plus') { //If added one, append new input.
-                items.append("<div id=\"iteminput" + currentVal + "\" class=\"mb-3 w-50\"><label for=\"item" + currentVal + "\">Model for damage " + currentVal + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + currentVal + "\" name=\"item" + currentVal + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
             }
         });
 
