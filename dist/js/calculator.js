@@ -1,6 +1,6 @@
 //TODO Support more items
 const itemDamages = {
-    'leather_boots': 65
+    'leather_boots': 64
 };
 
 /**
