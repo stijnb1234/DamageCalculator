@@ -1,2 +1,2 @@
-# VehiclesPlusCalculator
-Calculate the damage values for your Vehicles.
+# DamageCalculator
+Generate the texturepack asset files for your damaged items.
