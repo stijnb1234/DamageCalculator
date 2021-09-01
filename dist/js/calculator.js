@@ -1,6 +1,7 @@
 //TODO Support more items
 const itemDamages = {
-    'leather_boots': 64
+    'leather_boots': 64,
+    'netherite_hoe': 2030
 };
 
 /**
@@ -26,7 +27,7 @@ function toJSON(item, models) {
     //Default values
     json['parent'] = 'item/handheld';
     json['textures'] = {
-        'layer0': 'item/leather_boots'
+        'layer0': 'item/' . item
     };
 
     //Insert models
