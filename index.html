@@ -6,13 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css"
-          integrity="sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q=="
-          crossorigin="anonymous"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-          crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
+          integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="dist/css/beautify.css">
 </head>
 <body>
@@ -37,12 +36,12 @@
             <div class="mb-3 w-50">
                 <label for="itemcount">The amount of models:</label>
                 <div class="input-group">
-                    <button type="button" class="btn btn-outline-secondary btn-number" disabled
-                            data-type="minus" data-field="quant[1]">
+                    <button type="button" class="btn btn-outline-secondary btn-number" data-type="minus"
+                            data-field="quant[1]">
                         <span class="fas fa-minus"></span>
                     </button>
-                    <input type="text" id="itemcount" name="quant[1]" class="form-control input-number" value="1" min="1"
-                           max="2" readonly>
+                    <input type="text" id="itemcount" name="quant[1]" class="form-control input-number" value="1"
+                           min="1" max="2" readonly>
                     <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus"
                             data-field="quant[1]">
                         <span class="fas fa-plus"></span>
@@ -52,7 +51,8 @@
             <div id="items">
                 <div class="mb-3 w-50">
                     <label for="item1">Model for damage 1:</label>
-                    <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car" required>
+                    <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car"
+                           required>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Calculate</button>
@@ -67,7 +67,7 @@
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="application/javascript" src="dist/js/calculator.js"></script>
 <script type="application/javascript" src="dist/js/beautify.js"></script>
 <script>
@@ -134,7 +134,7 @@
             }
         });
 
-        form.on("submit", function(e){
+        form.on("submit", function (e) {
             e.preventDefault();
 
             //Get selected item

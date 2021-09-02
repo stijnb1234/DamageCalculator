@@ -33,26 +33,35 @@ function toJSON(item, models) {
     //Insert models
     json['overrides'] = [];
 
+    //Insert default model
+    json['overrides'][0] = {
+        'predicate': {
+            'damaged': 0,
+            'damage': 0
+        },
+        'model': 'item/' + item
+    };
+
     for (let i = 0; i < models.length; i++) {
         const model = models[i];
         const damage = getMappedDamage(i+1, itemDamages[item]);
 
-        json['overrides'][i] = {
+        json['overrides'][i+1] = {
             'predicate': {
                 'damaged': 0,
-                'damage': damage,
-                'model': 'item/' + model
-            }
+                'damage': damage
+            },
+            'model': model
         };
     }
 
     //Insert damaged model
-    json['overrides'][models.length] = {
+    json['overrides'][models.length+1] = {
         'predicate': {
             'damaged': 1,
-            'damage': 0,
-            'model': 'item/' + item
-        }
+            'damage': 0
+        },
+        'model': 'item/' + item
     };
 
     return JSON.stringify(json, null, 2);
