@@ -44,9 +44,9 @@ function toJSON(item, models) {
 
     for (let i = 0; i < models.length; i++) {
         const model = models[i];
-        const damage = getMappedDamage(i+1, itemDamages[item]);
+        const damage = getMappedDamage(i + 1, itemDamages[item]);
 
-        json['overrides'][i+1] = {
+        json['overrides'][i + 1] = {
             'predicate': {
                 'damaged': 0,
                 'damage': damage
@@ -56,7 +56,7 @@ function toJSON(item, models) {
     }
 
     //Insert damaged model
-    json['overrides'][models.length+1] = {
+    json['overrides'][models.length + 1] = {
         'predicate': {
             'damaged': 1,
             'damage': 0
