@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <title>SBDevelopment - Damage calculator</title>
 
@@ -7,187 +8,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
-          integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link rel="stylesheet" href="dist/css/beautify.css">
+        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="dist/css/beautify.min.css">
 </head>
+
 <body>
-<div class="container">
-    <div class="jumbotron mb-4">
-        <h1 class="display-4">SBDevelopment - Damage calculator</h1>
-        <p class="lead">Generate the texturepack asset files for your damaged items.</p>
-        <hr class="my-4">
-        <p>You indicate which item you want to use and where the models are for each damage value. This tool then
-            creates the .json file for you.</p>
-    </div>
-    <form id="calculatorForm">
-        <div class="mb-3 w-50">
-            <label for="item">The item to use:</label>
-            <select class="form-control" id="item" name="item" required>
-                <option value="" selected>Select an item...</option>
-                <option value="leather_boots">Leather Boots</option>
-                <option value="netherite_hoe">Netherite Hoe</option>
-            </select>
+    <div class="container">
+        <div class="jumbotron mb-4">
+            <h1 class="display-4">SBDevelopment - Damage calculator</h1>
+            <p class="lead">Generate the texturepack asset files for your damaged items.</p>
+            <hr class="my-4">
+            <p>You indicate which item you want to use and where the models are for each damage value. This tool then
+                creates the .json file for you.</p>
         </div>
-        <div id="formItems" style="display: none;">
+        <form id="calculatorForm">
             <div class="mb-3 w-50">
-                <label for="itemcount">The amount of models:</label>
-                <div class="input-group">
-                    <button type="button" class="btn btn-outline-secondary btn-number" data-type="minus"
-                            data-field="quant[1]">
-                        <span class="fas fa-minus"></span>
-                    </button>
-                    <input type="text" id="itemcount" name="quant[1]" class="form-control input-number" value="1"
-                           min="1" max="2" readonly>
-                    <button type="button" class="btn btn-outline-secondary btn-number" data-type="plus"
-                            data-field="quant[1]">
-                        <span class="fas fa-plus"></span>
-                    </button>
-                </div>
+                <label for="item">The item to use:</label>
+                <select class="form-control" id="item" name="item" required>
+                    <option value="" selected>Select an item...</option>
+                    <option value="leather_boots">Leather Boots</option>
+                    <option value="netherite_hoe">Netherite Hoe</option>
+                </select>
             </div>
-            <div id="items">
+            <div id="formItems" style="display: none;">
                 <div class="mb-3 w-50">
-                    <label for="item1">Model for damage 1:</label>
-                    <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car"
-                           required>
+                    <label for="itemcount">The amount of models:</label>
+                    <div class="input-group">
+                        <button type="button" class="btn btn-outline-secondary btn-number" id="minus" disabled>
+                            <span class="fas fa-minus"></span>
+                        </button>
+                        <input type="text" id="itemcount" name="quant" class="form-control input-number" value="1"
+                            min="1" max="1" readonly>
+                        <button type="button" class="btn btn-outline-secondary btn-number" id="plus" disabled>
+                            <span class="fas fa-plus"></span>
+                        </button>
+                    </div>
                 </div>
+                <div id="items">
+                    <div id="iteminput1" class="mb-3 w-50">
+                        <label for="item1">Model for damage 1:</label>
+                        <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car"
+                            required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Calculate</button>
             </div>
-            <button type="submit" class="btn btn-primary">Calculate</button>
-        </div>
-    </form>
-    <hr class="my-4">
-    <h6>Output JSON:</h6>
-    <pre id="content" class="mb-3 w-50">Fill in the form above to get an output.</pre>
-    <button id="copyButton" class="btn btn-primary mb-3 mr-3">Copy</button>
-    <a id="downloadButton" class="btn btn-secondary mb-3" href="#">Download</a>
-</div>
+        </form>
+        <hr class="my-4">
+        <h6>Output JSON:</h6>
+        <pre id="content" class="mb-3 w-50">Fill in the form above to get an output.</pre>
+        <button id="copyButton" class="btn btn-primary mb-3 mr-3">Copy</button>
+        <a id="downloadButton" class="btn btn-secondary mb-3" href="#">Download</a>
+    </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script type="application/javascript" src="dist/js/calculator.js"></script>
-<script type="application/javascript" src="dist/js/beautify.js"></script>
-<script>
-    $(document).ready(function () {
-        const form = $("#calculatorForm");
-        const formOptions = $("#formItems");
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="application/javascript" src="dist/js/calculator.min.js"></script>
+<script type="application/javascript" src="dist/js/beautify.min.js"></script>
+<script type="application/javascript" src="dist/js/scripts.min.js"></script>
 
-        const item = $("#item");
-        const itemCount = $("#itemcount");
-        const itemCountButton = $('.btn-number');
-        const items = $("#items");
-
-        const output = $("#content");
-
-        const copyButton = $("#copyButton");
-        const downloadButton = $("#downloadButton");
-
-        itemCountButton.click(function (e) {
-            e.preventDefault();
-
-            let fieldName = $(this).attr('data-field');
-            let type = $(this).attr('data-type');
-            const input = $("input[name='" + fieldName + "']");
-            const currentVal = parseInt(input.val());
-
-            if (!isNaN(currentVal)) {
-                if (type === 'minus') {
-                    if (currentVal > input.attr('min')) {
-                        input.val(currentVal - 1).change();
-                    }
-
-                    if (input.val() == input.attr('min')) {
-                        $(this).attr('disabled', true);
-                        return;
-                    }
-
-                    $("#iteminput" + currentVal).remove();
-                } else if (type === 'plus') {
-                    if (currentVal < input.attr('max')) {
-                        input.val(currentVal + 1).change();
-                    }
-
-                    if (input.val() == input.attr('max')) {
-                        $(this).attr('disabled', true);
-                        return;
-                    }
-
-                    items.append("<div id=\"iteminput" + (currentVal + 1) + "\" class=\"mb-3 w-50\"><label for=\"item" + (currentVal + 1) + "\">Model for damage " + (currentVal + 1) + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + (currentVal + 1) + "\" name=\"item" + (currentVal + 1) + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
-                }
-            } else {
-                input.val(0);
-            }
-        });
-
-        item.change(function () {
-            if (this.value !== "") { //If value is not empty, show other options ...
-                formOptions.show();
-
-                //... and set max value of item count.
-                const max = itemDamages[this.value];
-                itemCount.prop('max', max);
-            } else { //Or if empty, hide other options.
-                formOptions.hide();
-            }
-        });
-
-        form.on("submit", function (e) {
-            e.preventDefault();
-
-            //Get selected item
-            const selectedItem = item.val();
-
-            //Get amount of items
-            const fieldName = $('.btn-number').attr('data-field');
-            const input = $("input[name='" + fieldName + "']");
-            const currentVal = parseInt(input.val());
-
-            //Build models array
-            const models = [];
-            for (let i = 0; i < currentVal; i++) {
-                models[i] = $("#item" + (i + 1)).val();
-            }
-
-            //Convert to JSON, and set in content field (with syntax highlighting)
-            const json = toJSON(selectedItem, models);
-            output.html(syntaxHighlight(json));
-
-            //And fix the Download knop
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(json);
-            downloadButton.attr("href", dataStr);
-            downloadButton.attr("download", selectedItem + ".json");
-
-            //Return false to not reload the page
-            return false;
-        });
-
-        copyButton.click(function (e) {
-            e.preventDefault();
-
-            //Get the content.
-            const copyText = output.text();
-
-            //Create temporary textarea, select, copy, and remove it again.
-            const textArea = document.createElement("textarea");
-            textArea.textContent = copyText;
-            document.body.append(textArea);
-            textArea.select();
-            document.execCommand("copy");
-            textArea.remove();
-        });
-
-        /**
-         * Get a random model.
-         *
-         * @return {string} The random model.
-         */
-        function randomModel() {
-            const months = ["red_car", "blue_car", "green_car", "orange_car", "blue_bicycle", "red_bicycle", "green_bicycle", "orange_bicycle"];
-            return months[Math.floor(Math.random() * months.length)];
-        }
-    });
-</script>
 </html>
