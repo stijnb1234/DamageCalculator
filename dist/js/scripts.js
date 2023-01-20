@@ -19,8 +19,6 @@ $(document).ready(function () {
         const currentVal = parseInt(input.attr('value'));
 
         if (!isNaN(currentVal)) {
-            console.log("#iteminput" + currentVal);
-
             if (currentVal > input.attr('min')) {
                 input.attr('value', (currentVal - 1).toString());
             }
@@ -77,12 +75,8 @@ $(document).ready(function () {
     form.on("submit", function (e) {
         e.preventDefault();
 
-        //Get selected item
+        //Get selected item and amount of models
         const selectedItem = item.val();
-
-        //Get amount of items
-        const fieldName = $('.btn-number').attr('data-field');
-        const input = $("input[name='" + fieldName + "']");
         const currentVal = parseInt(input.attr('value'));
 
         //Build models array

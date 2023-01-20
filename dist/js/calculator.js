@@ -33,7 +33,7 @@ function buildJSON(item, models) {
 
     for (let i = 0; i < models.length; i++) {
         const model = models[i];
-        const damage = i + 1 / itemDamages[item];
+        const damage = (i + 1) / itemDamages[item];
 
         json['overrides'][i + 1] = {
             'predicate': {
