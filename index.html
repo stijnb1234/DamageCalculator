@@ -1,56 +1,83 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
-    <title>SBDevelopment - Damage calculator</title>
+    <title>Model File Generator · SBDevelopment</title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css"
-        integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA=="
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+        integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="dist/css/beautify.min.css">
+    <link rel="stylesheet" href="dist/css/styles.min.css">
+    <link rel="icon" href="https://sbdevelopment.tech/wp-content/uploads/2021/06/cropped-logo1-favicon-1-32x32.png"
+        type="image/png">
 </head>
 
 <body>
     <div class="container">
-        <div class="jumbotron mb-4">
-            <h1 class="display-4">SBDevelopment - Damage calculator</h1>
-            <p class="lead">Generate the texturepack asset files for your damaged items.</p>
+        <div class="jumbotron my-4">
+            <img src="https://sbdevelopment.tech/wp-content/uploads/2023/09/logo2-light.png" alt="SBDevelopment logo"
+                class="mb-3" style="width: 15em;">
+            <h1 class="display-4">Model File Generator</h1>
+            <p class="lead">Generate the resourcepack asset files for your VehiclesPlus models.</p>
             <hr class="my-4">
-            <p>You indicate which item you want to use and where the models are for each damage value. This tool then
+            <p class="fst-italic">You indicate which item you want to use and the path to the models models for each
+                value. This tool then
                 creates the .json file for you.</p>
         </div>
         <form id="calculatorForm">
+            <!-- <div class="mb-3 w-50" ?>
+                <label for="custommodeldata">Custom model data (1.14+):</label>
+                <div class="form-check form-switch form-switch-lg">
+                    <input class="form-check-input" type="checkbox" role="switch" id="custommodeldata" checked>
+                </div>
+                <div class="form-text" id="namespace-help">1.14+ supports custom model data, which is preferred. If you
+                    use 1.13 or lower, the calculator works with damage values.</div>
+            </div> -->
             <div class="mb-3 w-50">
-                <label for="item">The item to use:</label>
+                <label for="namespace">Namespace:</label>
+                <input type="text" class="form-control" id="namespace" name="namespace" required value="vp">
+                <div class="form-text" id="namespace-help">The example resourcepack places files in the '<b>vp</b>'
+                    namespace. If
+                    you use the 'minecraft' namespace, change it to <b>minecraft</b>.
+                </div>
+            </div>
+            <div class="mb-3 w-50">
+                <label for="item">Item:</label>
                 <select class="form-control" id="item" name="item" required>
                     <option value="" selected>Select an item...</option>
                 </select>
+                <div class="form-text" id="item-help">Select the item you want to use. If you want to support colors,
+                    use a Leather item.</div>
             </div>
             <div id="formItems" style="display: none;">
                 <div class="mb-3 w-50">
                     <label for="itemcount">The amount of models:</label>
                     <div class="input-group">
-                        <button type="button" class="btn btn-outline-secondary btn-number" id="minus" disabled>
+                        <button type="button" class="btn btn-outline-danger btn-number" id="minus" disabled>
                             <span class="fas fa-minus"></span>
                         </button>
                         <input type="text" id="itemcount" name="quant" class="form-control input-number" value="1"
                             min="1" max="1" readonly>
-                        <button type="button" class="btn btn-outline-secondary btn-number" id="plus" disabled>
+                        <button type="button" class="btn btn-outline-success btn-number" id="plus" disabled>
                             <span class="fas fa-plus"></span>
                         </button>
                     </div>
                 </div>
                 <div id="items">
                     <div id="iteminput1" class="mb-3 w-50">
-                        <label for="item1">Model for damage 1:</label>
-                        <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car"
-                            required>
+                        <label for="item1" class="form-label">Model for damage 1:</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="namespace1">vp:</span>
+                            <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car"
+                                required>
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Calculate</button>
@@ -63,8 +90,8 @@
         <a id="downloadButton" class="btn btn-secondary mb-3" href="#">Download</a>
     </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="application/javascript" src="dist/js/calculator.min.js"></script>
 <script type="application/javascript" src="dist/js/beautify.min.js"></script>

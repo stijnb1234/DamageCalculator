@@ -4,4 +4,5 @@
     "MinifyAll.disableJson": true,
     "MinifyAll.disableHtml": true,
     "MinifyAll.openMinifiedDocument": false,
+    "editor.formatOnSave": true,
 }

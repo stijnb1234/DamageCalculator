@@ -1,3 +1,5 @@
+let namespace = "vp";
+
 $(document).ready(function () {
     const form = $("#calculatorForm");
     const formOptions = $("#formItems");
@@ -14,12 +16,13 @@ $(document).ready(function () {
     const minus = $("#minus");
     const plus = $("#plus");
     const input = $("input[name='quant']");
+    const nsp = $("#namespace");
 
     const $select = $('#item');
 
     // Append the items to the select
-    $.each(itemDamages, function(key, value) {
-        const itemName = capitalize(key);
+    $.each(itemDamages, function (key, value) {
+        const itemName = capitalize(key) + " (supports " + value + " models)";
         $select.append($('<option></option>').attr('value', key).text(itemName));
     });
 
@@ -60,10 +63,19 @@ $(document).ready(function () {
                 minus.prop('disabled', true);
             }
 
-            items.append("<div id=\"iteminput" + (currentVal + 1) + "\" class=\"mb-3 w-50\"><label for=\"item" + (currentVal + 1) + "\">Model for damage " + (currentVal + 1) + ":</label><input type=\"text\" class=\"form-control\" id=\"item" + (currentVal + 1) + "\" name=\"item" + (currentVal + 1) + "\" placeholder=\"cars/" + randomModel() + "\" required></div>");
+            items.append("<div id=\"iteminput" + (currentVal + 1) + "\" class=\"mb-3 w-50\"><label for=\"item" + (currentVal + 1) + "\">Model for damage " + (currentVal + 1) + ":</label><div class=\"input-group mb-3\"><span class=\"input-group-text\" id=\"namespace" + (currentVal + 1) + "\">" + namespace + ":</span><input type=\"text\" class=\"form-control\" id=\"item" + (currentVal + 1) + "\" name=\"item" + (currentVal + 1) + "\" placeholder=\"cars/" + randomModel() + "\" required></div></div>");
         } else {
             input.attr('value', '0');
         }
+    });
+
+    nsp.change(function () {
+        namespace = nsp.val();
+        if (namespace == "") {
+            namespace = "minecraft";
+        }
+        nsp.val(namespace);
+        $("span[id^='namespace']").text(namespace + ":");
     });
 
     item.change(function () {
@@ -94,10 +106,10 @@ $(document).ready(function () {
         }
 
         //Convert to JSON, and set in content field (with syntax highlighting)
-        const json = buildJSON(selectedItem, models);
+        const json = buildJSON(selectedItem, namespace, models);
         output.html(syntaxHighlight(json));
 
-        //And fix the Download knop
+        //And fix the Download button
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(json);
         downloadButton.attr("href", dataStr);
         downloadButton.attr("download", selectedItem + ".json");

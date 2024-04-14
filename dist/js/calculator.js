@@ -12,16 +12,24 @@ const itemDamages = {
  * Generate the JSON file.
  *
  * @param item The item to generate it for.
+ * @param namespace The namespace to use.
  * @param models An array of models to insert.
  * @returns {String} The JSON for the texturepack.
  */
-function buildJSON(item, models) {
+function buildJSON(item, namespace, models) {
+    if (namespace == "minecraft") {
+        namespace = "";
+    } else {
+        namespace += ":";
+    }
+
     const json = {};
 
     //Default values
     json['parent'] = 'item/handheld';
     json['textures'] = {
-        'layer0': 'item/' + item
+        'layer0': 'item/' + item,
+        'layer1': 'item/' + item + '_overlay'
     };
 
     //Insert models
@@ -33,12 +41,12 @@ function buildJSON(item, models) {
             'damaged': 0,
             'damage': 0
         },
-        'model': 'item/' + item
+        'model': namespace + 'item/' + item
     };
 
     for (let i = 0; i < models.length; i++) {
         const model = models[i];
-        const damage = (i + 1) / (itemDamages[item]-1);
+        const damage = (i + 1) / (itemDamages[item] - 1);
 
         json['overrides'][i + 1] = {
             'predicate': {
