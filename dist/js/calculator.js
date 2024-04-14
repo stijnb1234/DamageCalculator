@@ -5,7 +5,9 @@ const itemDamages = {
     'leather_chestplate': 80,
     'leather_leggings': 75,
     'leather_boots': 65,
-    'netherite_hoe': 2031
+    'netherite_hoe': 2031,
+    'diamond_axe': 1561,
+    'diamond_hoe': 1561,
 };
 
 /**
