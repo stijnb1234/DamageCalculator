@@ -15,6 +15,14 @@ $(document).ready(function () {
     const plus = $("#plus");
     const input = $("input[name='quant']");
 
+    const $select = $('#item');
+
+    // Append the items to the select
+    $.each(itemDamages, function(key, value) {
+        const itemName = capitalize(key);
+        $select.append($('<option></option>').attr('value', key).text(itemName));
+    });
+
     minus.click(function (e) {
         const currentVal = parseInt(input.attr('value'));
 
@@ -102,6 +110,16 @@ $(document).ready(function () {
         e.preventDefault();
         navigator.clipboard.writeText(output.text());
     });
+
+    /**
+     * Capitalize a string.
+     * 
+     * @param {string} str A string to capitalize
+     * @returns 
+     */
+    function capitalize(str) {
+        return str.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
 
     /**
      * Get a random model.

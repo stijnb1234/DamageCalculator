@@ -1,6 +1,11 @@
+// Damage values for items
+// Can be found at: https://minecraft.fandom.com/wiki/
 const itemDamages = {
-    'leather_boots': 64,
-    'netherite_hoe': 2030
+    'leather_helmet': 55, // Called a cap for new versions of the game
+    'leather_chestplate': 80,
+    'leather_leggings': 75,
+    'leather_boots': 65,
+    'netherite_hoe': 2031
 };
 
 /**
@@ -33,7 +38,7 @@ function buildJSON(item, models) {
 
     for (let i = 0; i < models.length; i++) {
         const model = models[i];
-        const damage = (i + 1) / itemDamages[item];
+        const damage = (i + 1) / (itemDamages[item]-1);
 
         json['overrides'][i + 1] = {
             'predicate': {

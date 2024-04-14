@@ -1,0 +1,7 @@
+{
+    "MinifyAll.PrefixOfNewMinifiedFiles": ".min",
+    "MinifyAll.minifyOnSaveToNewFile": true,
+    "MinifyAll.disableJson": true,
+    "MinifyAll.disableHtml": true,
+    "MinifyAll.openMinifiedDocument": false,
+}
