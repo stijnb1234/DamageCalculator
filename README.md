@@ -1,2 +1,2 @@
 # DamageCalculator
-Generate the texturepack asset files for your damaged items.
+> **This repo has been moved to [SBDevelopment Git](https://git.sbdevelopment.tech/SBDevelopment/VPModelFileGenerator).**
