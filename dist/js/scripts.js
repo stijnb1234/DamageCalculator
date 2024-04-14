@@ -1,6 +1,8 @@
 let namespace = "vp";
 
 $(document).ready(function () {
+    const $cmd = $("#custommodeldata");
+
     const form = $("#calculatorForm");
     const formOptions = $("#formItems");
 
@@ -19,12 +21,6 @@ $(document).ready(function () {
     const nsp = $("#namespace");
 
     const $select = $('#item');
-
-    // Append the items to the select
-    $.each(itemDamages, function (key, value) {
-        const itemName = capitalize(key) + " (supports " + value + " models)";
-        $select.append($('<option></option>').attr('value', key).text(itemName));
-    });
 
     minus.click(function (e) {
         const currentVal = parseInt(input.attr('value'));
@@ -63,11 +59,43 @@ $(document).ready(function () {
                 minus.prop('disabled', true);
             }
 
-            items.append("<div id=\"iteminput" + (currentVal + 1) + "\" class=\"mb-3 w-50\"><label for=\"item" + (currentVal + 1) + "\">Model for damage " + (currentVal + 1) + ":</label><div class=\"input-group mb-3\"><span class=\"input-group-text\" id=\"namespace" + (currentVal + 1) + "\">" + namespace + ":</span><input type=\"text\" class=\"form-control\" id=\"item" + (currentVal + 1) + "\" name=\"item" + (currentVal + 1) + "\" placeholder=\"cars/" + randomModel() + "\" required></div></div>");
+            items.append("<div id=\"iteminput" + (currentVal + 1) + "\" class=\"mb-3 w-50\"><label for=\"item" + (currentVal + 1) + "\">Model for damage " + (currentVal + 1) + ":</label><div class=\"input-group mb-3\"><span class=\"input-group-text\" id=\"namespace" + (currentVal + 1) + "\">" + namespace + ":item/</span><input type=\"text\" class=\"form-control\" id=\"item" + (currentVal + 1) + "\" name=\"item" + (currentVal + 1) + "\" placeholder=\"cars/" + randomModel() + "\" required></div></div>");
         } else {
             input.attr('value', '0');
         }
     });
+
+    // Append the items to the select on load (default for CMD is checked)
+    $.each(itemDamages, function (key, value) {
+        const itemName = capitalize(key);
+        $select.append($('<option></option>').attr('value', key).text(itemName));
+    });
+
+    $cmd.change(function () {
+        $select.find('option').each(function () {
+            const key = $(this).val();
+            const itemName = capitalize(key);
+            const hasSupportText = ($(this).text().includes('(supports'));
+
+            if (key === "") {
+                // Keep the default "Select an item..." option as is
+                return;
+            }
+
+            if ($cmd.is(':checked')) {
+                if (hasSupportText) {
+                    const updatedText = itemName;
+                    $(this).text(updatedText);
+                }
+            } else {
+                if (!hasSupportText) {
+                    const updatedText = itemName + ' (supports ' + itemDamages[key] + ' models)';
+                    $(this).text(updatedText);
+                }
+            }
+        });
+    });
+
 
     nsp.change(function () {
         namespace = nsp.val();
@@ -75,7 +103,7 @@ $(document).ready(function () {
             namespace = "minecraft";
         }
         nsp.val(namespace);
-        $("span[id^='namespace']").text(namespace + ":");
+        $("span[id^='namespace']").text(namespace + ":item/");
     });
 
     item.change(function () {
@@ -95,6 +123,9 @@ $(document).ready(function () {
     form.on("submit", function (e) {
         e.preventDefault();
 
+        //Check if custommodeldata is supported
+        const supportsCMD = $cmd.is(":checked");
+
         //Get selected item and amount of models
         const selectedItem = item.val();
         const currentVal = parseInt(input.attr('value'));
@@ -106,7 +137,7 @@ $(document).ready(function () {
         }
 
         //Convert to JSON, and set in content field (with syntax highlighting)
-        const json = buildJSON(selectedItem, namespace, models);
+        const json = buildJSON(supportsCMD, selectedItem, namespace, models);
         output.html(syntaxHighlight(json));
 
         //And fix the Download button

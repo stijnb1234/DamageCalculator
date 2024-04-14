@@ -22,24 +22,24 @@
 <body>
     <div class="container">
         <div class="jumbotron my-4">
-            <img src="https://sbdevelopment.tech/wp-content/uploads/2023/09/logo2-light.png" alt="SBDevelopment logo"
-                class="mb-3" style="width: 15em;">
-            <h1 class="display-4">Model File Generator</h1>
+            <h1 class="display-4 pb-1"><img src="https://sbdevelopment.tech/wp-content/uploads/2023/09/logo2-light.png"
+                    alt="SBDevelopment logo" class="pe-1 pb-2" style="width: 3em;"> Model File Generator</h1>
             <p class="lead">Generate the resourcepack asset files for your VehiclesPlus models.</p>
-            <hr class="my-4">
+            <hr class="mb-3">
             <p class="fst-italic">You indicate which item you want to use and the path to the models models for each
                 value. This tool then
                 creates the .json file for you.</p>
         </div>
         <form id="calculatorForm">
-            <!-- <div class="mb-3 w-50" ?>
+            <div class="mb-3 w-50" ?>
                 <label for="custommodeldata">Custom model data (1.14+):</label>
                 <div class="form-check form-switch form-switch-lg">
                     <input class="form-check-input" type="checkbox" role="switch" id="custommodeldata" checked>
                 </div>
-                <div class="form-text" id="namespace-help">1.14+ supports custom model data, which is preferred. If you
+                <div class="form-text" id="namespace-help">1.14+ supports custom model data, which is preferred by
+                    VehiclesPlus. If you
                     use 1.13 or lower, the calculator works with damage values.</div>
-            </div> -->
+            </div>
             <div class="mb-3 w-50">
                 <label for="namespace">Namespace:</label>
                 <input type="text" class="form-control" id="namespace" name="namespace" required value="vp">
@@ -72,9 +72,9 @@
                 </div>
                 <div id="items">
                     <div id="iteminput1" class="mb-3 w-50">
-                        <label for="item1" class="form-label">Model for damage 1:</label>
+                        <label for="item1" class="form-label">Model for value 1:</label>
                         <div class="input-group mb-3">
-                            <span class="input-group-text" id="namespace1">vp:</span>
+                            <span class="input-group-text" id="namespace1">vp:item/</span>
                             <input type="text" class="form-control" id="item1" name="item1" placeholder="cars/blue_car"
                                 required>
                         </div>
@@ -83,7 +83,7 @@
                 <button type="submit" class="btn btn-primary">Calculate</button>
             </div>
         </form>
-        <hr class="my-4">
+        <hr class="mb-3">
         <h6>Output JSON:</h6>
         <pre id="content" class="mb-3 w-50">Fill in the form above to get an output.</pre>
         <button id="copyButton" class="btn btn-primary mb-3 mr-3">Copy</button>
